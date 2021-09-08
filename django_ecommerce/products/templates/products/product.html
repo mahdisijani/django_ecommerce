@@ -1,0 +1,113 @@
+{% extends 'products/base.html' %}
+
+{% block title %} {{product.name}}مشخصات {% endblock %}
+
+{% block content %}
+
+<div class="row">
+    
+    <!-- a product -->
+    <div class="col-md-3">
+        <div class="card">
+            <img class="card-img-top"
+                src="{{product.image.url}}"
+                alt="Card image cap">
+            <div class="card-body">
+                <p class="card-title">{{product.name}}</p>
+                <h3 class="card-title text-left">{{product.price}} <small>تومان</small> </h3>
+            </div>
+        </div>
+    </div>
+    <!-- /a product -->
+    <div class="product-details"><!--product-details-->
+        <div class="col-sm-5">
+            <div class="view-product">
+                <img src="{{product.image.url}}" alt="" />
+                <h3>بزرگنمایـی</h3>
+            </div>
+            <div id="similar-product" class="carousel slide" data-ride="carousel">
+                
+                  <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <div class="item active">
+                          <a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
+                          <a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
+                          <a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
+                        </div>
+                        <div class="item">
+                          <a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
+                          <a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
+                          <a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
+                        </div>
+                        <div class="item">
+                          <a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
+                          <a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
+                          <a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
+                        </div>
+                        
+                    </div>
+
+                  <!-- Controls -->
+                  <a class="right item-control" href="#similar-product" data-slide="next">
+                    <i class="fa fa-angle-right"></i>
+                  </a>
+                  <a class="left item-control" href="#similar-product" data-slide="prev">
+                    <i class="fa fa-angle-left"></i>
+                  </a>
+            </div>
+
+        </div>
+        <div class="col-sm-7">
+            <div class="product-information"><!--/product-information-->
+                <img src="images/product-details/new.png" class="newarrival" alt="" />
+                <div>
+                    <h2>کـالای شمـاره 010</h2>
+                    <p>شناسـه : 0110110</p>
+                </div>
+                <div>
+                    <span>
+                        <span>قیمت : 2.350.000 ريال</span>
+                    </span>
+                    <span>
+                        <label>تعداد :</label>
+                        <input type="text" value="3" class="search_box"/>
+                        <button type="button" class="btn btn-fefault cart">
+                            <i class="fa fa-shopping-cart"></i>
+                            افـزودن به سبـد خریـد
+                        </button>
+                    </span>
+                </div>
+                <div>
+                    <p><b>موجـودی :</b> در انبـار موجود می باشد</p>
+                    <p><b>شرایـط :</b> جدیـد</p>
+                    <p><b>برنـد :</b> برنـد </p>
+                </div>
+                <span  class="socials-share share">
+                    <ul>
+                        <a href="#">
+                            <li>
+                                <label>بلـه</label>
+                                <img src="images/product-details/Bale.png"/>
+                            </li>
+                        </a>
+                        <a href="#">
+                            <li>
+                                <label>سـروش</label>
+                                <img src="images/product-details/Soroush.png"/>
+                            </li>
+                        </a>
+                        <a href="#">
+                            <li>
+                                <label>اینستاگرام</label>
+                                <img src="images/product-details/Instagram.png"/>
+                            </li>
+                        </a>
+                        <li><img src="images/product-details/rating.png" alt="" /></li>
+                    </ul>
+                </span>
+                
+            </div><!--/product-information-->
+        </div>
+    </div><!--/product-details-->
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'products/base.html' %}
+
+{% block title %} خانه {% endblock %}
+
+{% block content %}
+
+<div class="row">
+    {% for product in products %}
+    <!-- a product -->
+    <div class="col-md-3">
+        <div class="card">
+            <img class="card-img-top" src="{{product.image.url}}" alt="Card image cap">
+            <div class="card-body">
+                <a href="{% url 'products:product' product.id %}" class=" card-title stretched-link">
+                    {{product.name}}
+                </a>
+                <h3 class="card-title text-left">{{product.price}} <small>تومان</small> </h3>
+            </div>
+        </div>
+    </div>
+    <!-- /a product -->
+    {% endfor %}
+</div>
+{% endblock %}
