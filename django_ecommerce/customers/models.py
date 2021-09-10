@@ -21,8 +21,18 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
-    address = models.TextField(null=True, blank=True)
-    device = models.CharField(max_length=200, null=True, blank=True)
+    device = models.CharField(max_length=200, null=True, blank=True) # use in cookies for add to cart without login
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+class Address(models.Model):
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, related_name='address')
+    city = models.CharField(max_length=50)
+    address = models.TextField()
+    postalcode = models.PositiveBigIntegerField()
+
+    def __str__(self):
+        return self.customer

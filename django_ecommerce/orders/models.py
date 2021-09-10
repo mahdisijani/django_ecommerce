@@ -39,18 +39,6 @@ class Payment(models.Model):
         return self.id
 
 
-class ShippingAddress(models.Model):
-    customer = models.ForeignKey(
-        Customer, on_delete=models.CASCADE, related_name='shippingaddress')
-    order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
-    city = models.CharField(max_length=50)
-    address = models.TextField()
-    postalcode = models.PositiveBigIntegerField()
-
-    def __str__(self):
-        return self.customer
-
-
 class DiscountCode(models.Model):
     """
     Admin can add Discount Code for 

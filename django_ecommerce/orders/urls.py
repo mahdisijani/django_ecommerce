@@ -5,7 +5,7 @@ app_name = 'orders'
 
 urlpatterns = [
     # first argument is the url prefix,
-
+    path('updateItem/', updateItem, name='updateItem'),
     
     
 ]
