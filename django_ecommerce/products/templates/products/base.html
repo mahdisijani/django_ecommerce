@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+{% load static %}
 <html lang="en" dir="rtl">
 
 <head>
@@ -8,42 +8,81 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>{% block title %}{% endblock %}</title>
     {% block extra_head %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 
 <body>
+    <!-- navbar-start -->
+
     <div class="container-fluid text-right">
         <div class="row" style="border:darkblue solid 2px;">
-            <div class="col-md-12 p-2" style="background-color: lightgray;">
+            <div class="col-md-9 p-2" style="background-color: lightgray;">
                 <h1>فروشگاه من</h1>
+            </div>
+            <div class="col-md-3 p-2" style="background-color: lightgray;">
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">جستجو</button>
+                </form>
             </div>
         </div>
         <div class="row" style="background-color: lightgray;border:darkblue solid 2px;">
-            <div class="col-1"><a href="">خانه</a></div>
-            <div class="col-1"><a href="">Class List</a></div>
-            <div class="col-1"><a href="">Student List</a></div>
-            <div class="col-1"><a href="">New Student</a></div>
-            <div class="col-7"></div>
+            <div class="col-1"><a href="{% url 'products:index' %}" class="text-primary">خانه</a></div>
+            <div class="col-1"><a href="" class="text-primary">محصولات</a></div>
+            <div class="col-6"></div>
             {% if user.is_authenticated %}
-            <div class="col-1"><a href="">Login</a></div>
+            <div class="col-1"><a href="{% url 'customers:user_info' %}" class="text-primary">حساب کاربری</a></div>
+            <div class="col-2"><a href="{% url 'customers:change_password' %}" class="text-primary">تغییر کلمه عبور</a></div>
+            <div class="col-1"><a href="{% url 'customers:logout' %}" class="text-primary">خروج</a></div>
             {% else %}
-            <div class="col-1"><a href="">Login</a></div>
-            <div class="col-1"><a href="">Register</a></div>
+            <div class="col-1"><a href="{% url 'customers:login' %}" class="text-primary">ورود</a></div>
+            <div class="col-1"><a href="{% url 'customers:register' %}" class="text-primary">ثبت نام</a></div>
             {% endif %}
         </div>
-        <div class="container-fluid p-2">
-            <div class="row">
-                <div class="col-3 p-2">
-                    <h1>سایدبار</h1>
-                </div>
-                <div class="col-9 p-2">{% block content %}{% endblock %}</div>
-
-            </div>
 
 
-
+        <div class="container-fluid p-2" id="main">
+            {% block content %}{% endblock %}
         </div>
 
     </div>
+
+    <!-- begin:footer -->
+    <div id="footer" class="bg-dark text-white text-right">
+        <div class="container">
+            <div class="row pt-5">
+                <div class="col-6 p-2">
+                    <h3>درباره من</h3><br>
+                    <p>مهدی سیجانی</p>
+
+                    <p> کاروند بوت کمپ مکتب 53
+                        (Python Back-End Developer)</p>
+
+                </div>
+                <div class="col-2 p-2"></div>
+                <div class="col-4 p-2">
+                    <div class="widget">
+                        <h3>لینک ها</h3>
+                        <address>
+                            Telp. : +98-123456789<br>
+                            Email : Info@gmail.com
+                        </address>
+                    </div>
+                </div>
+
+
+                <!-- begin:copyleft -->
+                <div class="row">
+                    <div class="col-md-12 copyleft">
+                        <p> هر گونه کپی برداری با ذکر منبع مجاز می باشد.</p>
+
+                        <a href="#top" class="btn btn-primary scroltop"><i class="fa fa-angle-up"></i></a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end:footer -->
 </body>
 
 <script type="text/javascript">

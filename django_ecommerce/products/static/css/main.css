@@ -1,0 +1,38 @@
+
+a:link {
+  color: black;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:visited {
+  color: black;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:hover {
+  color: black;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:active {
+  color: black;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+
+
+@font-face {
+  font-family: 'BYekan';
+  src: url('http://fontonline.ir/fonts/BYekan.eot?#') format('eot'),
+      url('http://fontonline.ir/fonts/BYekan.ttf') format('truetype'),
+      url('http://fontonline.ir/fonts/BYekan.woff') format('woff');
+}
+
+* {
+  font-family: 'BYekan', Sans-Serif;
+  /* font-size: 14px; */
+}
