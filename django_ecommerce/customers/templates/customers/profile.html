@@ -1,0 +1,11 @@
+{% extends 'products/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} اطلاعات کاربری {% endblock %}
+
+{% block content %}
+
+<a href="{% url 'customers:user_info' %}" class="btn btn-primary">ویرایش اطلاعات</a><br><br>
+<a href="{% url 'orders:orders_list' %}" class="btn btn-primary">تاریخچه سفارشات</a><br><br>
+<a href="{% url 'orders:last_orders' %}" class="btn btn-primary"> سفارشات اخیر</a><br><br>
+
+{% endblock %}

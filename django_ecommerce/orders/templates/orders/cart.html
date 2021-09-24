@@ -1,0 +1,41 @@
+{% extends 'products/base.html' %}
+
+{% block title %} سبد خرید {% endblock %}
+
+{% block content %}
+{% if cart.item.all %}
+<div class="row p-2">
+    <div class="col-7 p-2">
+        <div class="row">
+            {% for item in cart.item.all %}
+            <div class="col-12  p-2">
+                <div class="row border">
+                    <div class="col-3">
+                        <img src="{{item.product.image.url}}" style="height: 20vh;" alt="">
+                    </div>
+                    <div class="col-9">
+                        <h4>{{item.product.name}}</h4>
+                        <p>{{item.quantity}}</p>
+                        <p>قیمت:{{item.total_item_price}}تومان</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-1"></div>
+    <div class="col-3 p-2">
+        <div class=" row border">
+            <div class="col-12 p-2">
+                <h4>قیمت نهایی:</h4>
+                <p>{{cart.total_price}}</p>
+            </div>
+            
+
+        </div>
+    </div>
+</div>
+{% else %}
+<p>No Orders yet</p>
+{% endif %}
+{% endblock %}

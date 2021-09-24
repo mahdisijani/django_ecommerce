@@ -10,10 +10,9 @@ User = get_user_model()
 
 
 def register_view(request):
-    registerForm=RegisterForm(request.POST)
+    registerForm = RegisterForm(request.POST)
 
-    
-    return render(request, 'customers/register.html', context={'registerForm': registerForm,})
+    return render(request, 'customers/register.html', context={'registerForm': registerForm, })
 
 
 def login_view(request):
@@ -39,17 +38,32 @@ def change_password(request):
 
     return render(request, 'customers/change_password.html')
 
+
 def password_reset(request):
 
     return render(request, 'customers/password_reset.html')
 
+
 def user_info(request):
-    
     customer, created = Customer.objects.get_or_create(user=request.user)
     address, created = Address.objects.get_or_create(customer=customer)
+
+    if request.method == 'POST':
+        userForm = UserForm(request.POST, instance=request.user)
+        customerForm = CustomerForm(request.POST, instance=customer)
+        addressForm = AddressForm(request.POST, instance=address)
+        if userForm.is_valid() and customerForm.is_valid() and addressForm.is_valid():
+            userForm.save()
+            customerForm.save()
+            addressForm.save()
+        return redirect('products:index')
+
     userForm = UserForm(instance=request.user)
     customerForm = CustomerForm(instance=customer)
     addressForm = AddressForm(instance=address)
 
-
     return render(request, 'customers/user_info.html', context={'userForm': userForm, 'customerForm': customerForm, 'addressForm': addressForm})
+
+def profile(request):
+
+    return render(request, 'customers/profile.html')

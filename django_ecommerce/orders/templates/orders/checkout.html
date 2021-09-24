@@ -1,0 +1,56 @@
+{% extends 'products/base.html' %}
+
+{% block title %} پرداخت {% endblock %}
+
+{% block content %}
+{% if cart.item.all %}
+<div class="row p-2">
+    <div class="col-7 p-2">
+        <form action="" id="coupon_form">
+            {% csrf_token %}
+            <label for="coupon" class="my-4">کد تخفیف:</label><br>
+            <input type="text" name="coupon"><br>
+            <input type="button" id="submit" value=" اعمال کد تخفیف" class="btn btn-primary my-5"
+                style="font-size: 1vw;">
+        </form>
+    </div>
+    <div class="col-1"></div>
+    <div class="col-3 p-2">
+        <div class=" row border">
+            <div class="col-12 p-2">
+                <h4>قیمت نهایی:</h4>
+                <p id="total_price">{{cart.final_price}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<p>سبد خرید شما خالی است.</p>
+{% endif %}
+
+<script>
+    $("#submit").on('click', function () {
+        console.log("RUN");
+        console.log($("#coupon_form").serialize());
+        // send ajax
+        $.ajax({
+            url: "{% url 'orders_api:use_coupon' %}", // url where to submit the request
+            type: "POST", // type of action POST || GET
+            dataType: 'json', // data type
+            data: $("#coupon_form").serialize(), // post data || get data
+            success: function (result) {
+                console.log("success");
+                alert(" کد تخفیف شما با موفقیت اعمال شد")
+                // you can see the result from the console
+                // tab of the developer tools
+                console.log(result);
+                $("#total_price").text(result)
+            },
+            error: function (xhr, resp, text) {
+                console.log("error");
+                console.log(xhr, resp, text);
+            }
+        })
+    });
+</script>
+{% endblock %}
