@@ -31,8 +31,8 @@ Then install the project dependencies with ::
 
 Before running project:
 ::
+
     create a postgres database and import ecommerce_db.sql into database.
-    
     config environment variables in sample.env file and rename it to .env.
 
 Run
