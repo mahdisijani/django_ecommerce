@@ -13,24 +13,23 @@ default Git version is the master branch. ::
     $ git clone https://github.com/mahdisj/django_ecommerce.git
     $ cd django_ecommerce
 
-Create a virtualenv and activate it::
+Create a virtualenv and activate it
 
     $ python3 -m venv venv
     $ . venv/bin/activate
 
-Or on Windows cmd::
+Or on Windows cmd
 
     $ py -3 -m venv venv
     $ venv\Scripts\activate.bat
 
-Then install the project dependencies with ::
+Then install the project dependencies with 
 
     $ pip install -r requirements.txt
 
 **Notice about Database:**
 
 Before running project:
-::
 
     create a postgres database and import ecommerce_db.sql into database.
     config environment variables in sample.env file and rename it to .env.
