@@ -38,7 +38,6 @@ Before running project:
 Run
 ---
 
-::
 
     $ python manage.py runserver
 
