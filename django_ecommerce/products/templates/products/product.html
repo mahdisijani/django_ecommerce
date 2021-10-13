@@ -1,145 +1,43 @@
 {% extends 'products/base.html' %}
-
-{% block title %} {{product.name}}مشخصات {% endblock %}
+{% load static %}
+{% load i18n %}
+{% load humanize %} 
+{% block title %} {{product.name}}{% translate "Detail"%} {% endblock %}
 
 {% block content %}
-{% csrf_token %}
-<div class="row">
 
-    <!-- a product -->
-    <div class="col-md-12">
-        <div class="card">
-            <img class="card-img-top" src="{{product.image.url}}" alt="Card image cap">
-            <div class="card-body">
-                <p class="card-title">{{product.name}}</p>
-                <h3 class="card-title text-left">{{product.price}} <small>تومان</small> </h3>
-                <input type="number" id="quantity">
-                <button class="btn btn-outline-secondary add-btn"
-                    onclick="add_item({{product.id}},$('#quantity').val())">افزودن به سبد
-                    خرید</button>
+<div class="row p-2 border">
+    <div class="col-4 border text-center p-5 m-2">
+        <img src="{{product.image.url}}" class="img-fluid">
+        <div class="row">
+            {% for image in product.images.all %}
+            <div class="col-6">
+                <img src="{{image.image.url}}" class="img-thumbnail">
             </div>
+            {% endfor %}
         </div>
     </div>
-    <!-- /a product -->
-    <!--/product-details-->
-    <div class="product-details">
-        <!--product-details-->
-        <div class="col-sm-5">
-            <div class="view-product">
-                <img src="{{product.image.url}}" alt="" />
-                <h3>بزرگنمایـی</h3>
-            </div>
-            <div id="similar-product" class="carousel slide" data-ride="carousel">
+    <div class="col-7 border p-5 m-2">
+        <h4>{{product.name}}</h4>
+        <div style="min-height: 20vh;"></div>
+        <h3 class=" text-left">{{product.price|intcomma}} <small>{% translate "Toman"%}</small> </h3><br>
 
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
-                        <a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
-                        <a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
-                    </div>
-                    <div class="item">
-                        <a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
-                        <a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
-                        <a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
-                    </div>
-                    <div class="item">
-                        <a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
-                        <a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
-                        <a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
-                    </div>
+        <input type="button" data-product="{{product.id}}" data-action="add"
+            onclick="add_item(this.dataset.product,this.dataset.action)" value="{% translate 'Add to Cart'%}"
+            class="btn btn-primary">
 
-                </div>
 
-                <!-- Controls -->
-                <a class="right item-control" href="#similar-product" data-slide="next">
-                    <i class="fa fa-angle-right"></i>
-                </a>
-                <a class="left item-control" href="#similar-product" data-slide="prev">
-                    <i class="fa fa-angle-left"></i>
-                </a>
-            </div>
-
-        </div>
-        <div class="col-sm-7">
-            <div class="product-information">
-                <!--/product-information-->
-                <img src="images/product-details/new.png" class="newarrival" alt="" />
-                <div>
-                    <h2>کـالای شمـاره 010</h2>
-                    <p>شناسـه : 0110110</p>
-                </div>
-                <div>
-                    <span>
-                        <span>قیمت : 2.350.000 ريال</span>
-                    </span>
-                    <span>
-                        <label>تعداد :</label>
-                        <input type="text" value="3" class="search_box" />
-                        <button type="button" class="btn btn-fefault cart">
-                            <i class="fa fa-shopping-cart"></i>
-                            افـزودن به سبـد خریـد
-                        </button>
-                    </span>
-                </div>
-                <div>
-                    <p><b>موجـودی :</b> در انبـار موجود می باشد</p>
-                    <p><b>شرایـط :</b> جدیـد</p>
-                    <p><b>برنـد :</b> برنـد </p>
-                </div>
-                <span class="socials-share share">
-                    <ul>
-                        <a href="#">
-                            <li>
-                                <label>بلـه</label>
-                                <img src="images/product-details/Bale.png" />
-                            </li>
-                        </a>
-                        <a href="#">
-                            <li>
-                                <label>سـروش</label>
-                                <img src="images/product-details/Soroush.png" />
-                            </li>
-                        </a>
-                        <a href="#">
-                            <li>
-                                <label>اینستاگرام</label>
-                                <img src="images/product-details/Instagram.png" />
-                            </li>
-                        </a>
-                        <li><img src="images/product-details/rating.png" alt="" /></li>
-                    </ul>
-                </span>
-
-            </div>
-            <!--/product-information-->
-        </div>
     </div>
-    <!--/product-details-->
+
+</div>
+<div class="row border mt-5">
+    <div class="col-12 p-5 ">
+        <h4>{% translate "Product Detail"%}</h4>
+        <p>{{product.description}}</p>
+    </div>
 </div>
 <script>
-    function add_item(productId, quantity) {
-        console.log(productId);
-        console.log(quantity);
-        // csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value
-        var csrf_token = $("[name='csrfmiddlewaretoken']")[0].val;
-        data = {"productId": productId, "quantity": quantity }
-        data = JSON.stringify(data)
-        $.ajax({
-            type: "POST",
-            url: "{% url 'orders:updateItem'%}",
-            data: data,
-            dataType : "json",
-            headers: {'X-CSRFToken': '{{ csrf_token }}'},
-            success: function (data) {
-                console.log("SUCCESS")
-
-            },
-            cache: false,
-            contentType: 'application/json',
-            contentType: false,
-            processData: false
-        });
-    }
+    add_to_cart_text = "{% translate 'Product added to cart successfully'%}"
 </script>
+<script src="{% static 'js/product.js' %}"></script>
 {% endblock %}

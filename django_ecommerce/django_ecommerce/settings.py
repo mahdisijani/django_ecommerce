@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -44,16 +44,20 @@ INSTALLED_APPS = [
     'orders',
     'products',
     'crispy_forms',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    
 ]
 
 ROOT_URLCONF = 'django_ecommerce.urls'
@@ -121,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 # LANGUAGE_CODE = 'en-us'
-LANGUAGE_CODE = 'fa-fa'
+LANGUAGE_CODE = 'fa'
 
 TIME_ZONE = 'UTC'
 
@@ -131,6 +135,16 @@ USE_L10N = True
 
 USE_TZ = True
 
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGE_CODE = 'fa'
+
+LANGUAGES = (
+    ('fa', _('Persian')),
+    ('en', _('English')),
+    
+)
+LOCALE_PATHS =[os.path.join(BASE_DIR,'locale')]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -144,6 +158,3 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-EMAIL_ADDRESS = config('EMAIL_ADDRESS')
-EMAIL_PASSWORD = config('EMAIL_PASSWORD')

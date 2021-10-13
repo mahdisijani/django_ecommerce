@@ -1,0 +1,27 @@
+{% extends 'products/base.html' %}
+{% load i18n%}
+{% block title %} {% translate 'Profile'%} {% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-3 p-2">
+        <div class="card" style="width: 18rem;">
+            <div class="card-header">
+                {{user.customer.first_name}} {{user.customer.last_name}}
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><a href="{% url 'customers:user_info' %}">{% translate 'Edit Info'%}</a></li>
+                <li class="list-group-item"><a href="{% url 'customers:change_password' %}">{% translate "Change Password"%}</a></li>
+                <li class="list-group-item"><a href="{% url 'customers:orders_list' %}">{% translate "Orders history"%}</a></li>
+                <li class="list-group-item"><a href="{% url 'customers:last_orders' %}"> {% translate "Last orders"%}</a></li>
+                <li class="list-group-item"><a href="{% url 'customers:user_address' %}"> {% translate 'Addresses'%} </a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-8 p-2 ">
+        {% block profile_content %}{% endblock %}
+    </div>
+</div>
+
+{% endblock %}

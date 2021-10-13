@@ -10,8 +10,10 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('change_password/', change_password, name='change_password'),
     path('password_reset/', password_reset, name='password_reset'),
-    # path('register/', CustomerRegister.as_view(), name='register'),
-    # path('accounts/', include('django.contrib.auth.urls')),
     path('user_info/', user_info, name='user_info'),
     path('profile/', profile, name='profile'),
+    path('orders_list/', orders_list, name='orders_list'),
+    path('last_orders/', last_orders, name='last_orders'), 
+    path('order_detail/<int:order_id>/', order_detail, name='order_detail'),   
+    path('user_address/', user_address, name='user_address'),   
 ]

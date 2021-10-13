@@ -1,22 +1,31 @@
 {% extends 'products/base.html' %}
-
-{% block title %} ورود {% endblock %}
+{% load i18n%}
+{% block title %} {% translate "login"%} {% endblock %}
 
 {% block content %}
 
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} text-center" role="alert">
+    <h4 class="alert-heading">{{ message }} </h4>
+</div>
+{% endfor %}
+{% endif %}
 <div class="row">
     <div class="col mx-auto">
-        <div class="card mx-auto text-center my-5"
-        style="border-radius: 25px; width: 30vw;  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+        <div class="card mx-auto text-center my-5" style="border-radius: 25px; width: 30vw;  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
         font-size: 1.4vw;">
-            <form id="login_form" method="post" action="{% url 'customers:login' %}" enctype="multipart/form-data" class="form-signin p-3">
+            <form id="login_form" method="post" action="{% url 'customers:login' %}" enctype="multipart/form-data"
+                class="form-signin p-3">
                 {% csrf_token %}
-                <label for="username" class="my-4">نام کاربری:</label><br>
+                <label for="username" class="my-4"> {% translate "Username"%}:</label><br>
                 <input type="text" name="username"><br>
-                <label for="password" class="my-4">گذرواژه:</label><br>
+                <label for="password" class="my-4">{% translate "Password"%}:</label><br>
                 <input type="password" name="password"><br>
-                <a href="{% url 'customers:password_reset' %}">بازیابی گذرواژه </a>
-                <input type="submit" id="submit" value="ورود" class="btn btn-primary my-5" style="font-size: 1.4vw;">
+                <a href="{% url 'customers:password_reset' %}">{% translate "Reset Password"%} </a>
+                <input type="submit" id="submit" value="{% translate 'login'%}" class="btn btn-primary my-5"
+                    style="font-size: 1.4vw;">
+                <input type="hidden" name="next" value="{{request.GET.next  }}">
             </form>
         </div>
     </div>

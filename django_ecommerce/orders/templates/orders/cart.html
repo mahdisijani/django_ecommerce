@@ -1,22 +1,31 @@
 {% extends 'products/base.html' %}
-
-{% block title %} سبد خرید {% endblock %}
+{% load static %}
+{% load i18n%}
+{% load humanize %} 
+{% block title %} {% translate "Cart"%} {% endblock %}
 
 {% block content %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} text-center" role="alert">
+    <h4 class="alert-heading">{{ message }} </h4>
+</div>
+{% endfor %}
+{% endif %}
 {% if cart.item.all %}
 <div class="row p-2">
     <div class="col-7 p-2">
         <div class="row">
             {% for item in cart.item.all %}
-            <div class="col-12  p-2">
-                <div class="row border">
+            <div class="col-12  p-2 border">
+                <div class="row ">
                     <div class="col-3">
-                        <img src="{{item.product.image.url}}" style="height: 20vh;" alt="">
+                        <img src="{{item.product.image.url}}" class="img-thumbnail"  >
                     </div>
                     <div class="col-9">
                         <h4>{{item.product.name}}</h4>
-                        <p>{{item.quantity}}</p>
-                        <p>قیمت:{{item.total_item_price}}تومان</p>
+                        <div class="col"> <a data-product="{{item.product.id}}" data-action="remove" onclick="update_item(this.dataset.product,this.dataset.action)">-</a><a class="border">{{item.quantity}}</a><a data-product="{{item.product.id}}" data-action="add" onclick="update_item(this.dataset.product,this.dataset.action)">+</a> </div>
+                        <p>{% translate "Price"%}:{{item.total_item_price|intcomma}}{% translate "Toman"%}</p>
                     </div>
                 </div>
             </div>
@@ -27,15 +36,18 @@
     <div class="col-3 p-2">
         <div class=" row border">
             <div class="col-12 p-2">
-                <h4>قیمت نهایی:</h4>
-                <p>{{cart.total_price}}</p>
+                <h4>{% translate "Total Price"%}:</h4>
+                <h4 > {{cart.total_price|intcomma}} {% translate "Toman"%}</h4>
+                <a href="{% url 'orders:checkout' %}" class="btn btn-primary">{% translate "Checkout"%}  </a><br><br>
             </div>
-            
+
 
         </div>
     </div>
 </div>
+<script src="{% static 'js/cart.js' %}"></script>
 {% else %}
-<p>No Orders yet</p>
+<p>{% translate "Your Cart is empty"%}</p>
 {% endif %}
+
 {% endblock %}

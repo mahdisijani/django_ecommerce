@@ -7,5 +7,6 @@ app_name = 'orders_api'
 urlpatterns = [
     # first argument is the url prefix,
     path('use_coupon/', use_coupon, name='use_coupon'),
+    path('update_item/', update_item, name='update_item'),
 ]
 

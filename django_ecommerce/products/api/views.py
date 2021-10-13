@@ -14,7 +14,7 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
 
 class ProductsViewSet(ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by('-create_date')
     serializer_class = ProductSerializers
     pagination_class = StandardResultsSetPagination
 
@@ -25,5 +25,16 @@ class ProductsByCatViewSet(ModelViewSet):
 
     def get_queryset(self):
         category = self.request.GET.get('category')
-        queryset = Product.objects.filter(category=category)
+        queryset = Product.objects.filter(category=category).order_by('-create_date')
+        return queryset
+
+class ProductsByTagViewSet(ModelViewSet):
+    
+    serializer_class = ProductSerializers
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+        tag = self.request.GET.get('tag')
+        tag= Tag.objects.get(name=tag)
+        queryset = Product.objects.filter(tags=tag).order_by('-create_date')
         return queryset

@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import base
 from django.db.models.deletion import RESTRICT
-
+from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 from django.dispatch import receiver
 from django.urls import reverse
 from django_rest_passwordreset.signals import reset_password_token_created
@@ -10,38 +12,32 @@ from django.core.mail import send_mail
 
 
 class User(AbstractUser):
-    email=models.EmailField(unique=True,verbose_name='ایمیل')
-    image = models.ImageField(upload_to='user/', null=True, blank=True)
-    class_role_choices = (
-        (1, 'Admin'),
-        (2, 'Staff'),
-        (3, 'Customer'),
-    )
-    role = models.PositiveSmallIntegerField(choices=class_role_choices,
-                                            default=3)
-
-
-class Customer(models.Model):
-    user = models.OneToOneField(
-        User, related_name='customer', on_delete=RESTRICT, null=True, blank=True)
-    first_name = models.CharField(max_length=50, null=True, blank=True)
-    last_name = models.CharField(max_length=50, null=True, blank=True)
-    # email = models.EmailField(null=True, blank=True)
-    device = models.CharField(max_length=200, null=True, blank=True) # use in cookies for add to cart without login
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-
+    email=models.EmailField(unique=True,verbose_name=_('email'),null=True,blank=True)
+    mobile=models.CharField(max_length=20,null=True,blank=True,unique=True,verbose_name=_('mobile'))
+    
+    def clean(self):
+        if self.mobile != None:
+            if  (len(self.mobile) != 11) or (not(self.mobile.isnumeric())):
+                raise ValidationError(
+                    {'mobile': _('The mobile number is invalid')})
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
 class Address(models.Model):
-    customer = models.ForeignKey(
-        Customer, on_delete=models.CASCADE, related_name='address',null=True)
-    city = models.CharField(max_length=50)
-    address = models.CharField(max_length=1000)
-    postalcode = models.CharField(max_length=10)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='address',null=True,verbose_name=_('user'))
+    city = models.CharField(max_length=50,verbose_name=_('city'))
+    address = models.CharField(max_length=1000,verbose_name=_('address'))
+    postalcode = models.CharField(max_length=10,verbose_name=_('postalcode'))
 
     def __str__(self):
-        return f"{self.customer.first_name} {self.customer.last_name}"
+        return f"{self.city} - {self.address}"
+    
+    class Meta:
+       verbose_name = _('Address')
+       verbose_name_plural = _('Addresses')
+
 
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):

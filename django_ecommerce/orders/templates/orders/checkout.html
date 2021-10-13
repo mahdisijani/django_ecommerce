@@ -1,56 +1,128 @@
 {% extends 'products/base.html' %}
-
-{% block title %} پرداخت {% endblock %}
-
+{% load static %}
+{% load i18n%}
+{% load humanize %} 
+{% load crispy_forms_tags %}
+{% block title %} {% translate "Checkout"%} {% endblock %}
 {% block content %}
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} text-center" role="alert">
+    <h4 class="alert-heading">{{ message }} </h4>
+</div>
+{% endfor %}
+{% endif %}
+
 {% if cart.item.all %}
 <div class="row p-2">
     <div class="col-7 p-2">
-        <form action="" id="coupon_form">
-            {% csrf_token %}
-            <label for="coupon" class="my-4">کد تخفیف:</label><br>
-            <input type="text" name="coupon"><br>
-            <input type="button" id="submit" value=" اعمال کد تخفیف" class="btn btn-primary my-5"
-                style="font-size: 1vw;">
-        </form>
+        <div>
+            <h4>{% translate "Select your address"%}</h4>
+        </div>
+        {% if addresses %}
+        <div class="border p-2">
+            <form action="{% url 'orders:checkout' %}" id="address_form" method="POST">
+                {% csrf_token %}
+                <table class="table table-striped mt-5">
+                    <thead>
+                        <tr>
+                            <th> </th>
+                            <th>{% translate "City"%} </th>
+                            <th>{% translate "Address"%} </th>
+                            <th>{% translate "Zip Code"%}</th>
+                        </tr>
+                    </thead>
+
+                    {% for address in addresses %}
+                    <tr>
+                        <td>
+                            <input type="radio" required name="address_id" value="{{address.id}}">
+                        </td>
+                        <td>
+                            {{ address.city }}
+                        </td>
+                        <td>
+                            {{ address.address }}
+                        </td>
+                        <td>
+                            {{ address.postalcode }}
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </table>
+            </form>
+        </div>
+
+
+        {% else %}
+        <p>{% translate "There is no address"%}</p>
+        {% endif %}
+        <div class="p-2">
+            <div class="mt-2">
+                <h4>{% translate "Add New Address"%}</h4>
+            </div>
+            <div class="p-2 border">
+                <form action="" id="add_address_form">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-0">
+                            {{ addressForm.address|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-8 mb-0">
+                            {{ addressForm.city|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4 mb-0">
+                            {{ addressForm.postalcode|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <input type="button" id="submit" value="{% translate 'Add Address'%} " onclick="add_address()"
+                        class="btn btn-primary my-5">
+                </form>
+            </div>
+        </div>
+
+
+
     </div>
     <div class="col-1"></div>
     <div class="col-3 p-2">
         <div class=" row border">
             <div class="col-12 p-2">
-                <h4>قیمت نهایی:</h4>
-                <p id="total_price">{{cart.final_price}}</p>
+                <form action="" id="coupon_form">
+                    {% csrf_token %}
+                    <label for="coupon" class="my-4">{% translate "Coupon"%}:</label><br>
+                    <input type="text" name="coupon"><br>
+                    <input type="button" id="submit" onclick="add_coupon()" value="{% translate 'Add Coupon'%}"
+                        class="btn btn-primary my-5" style="font-size: 1vw;">
+                </form>
+
+                <h4>{% translate "Final Price"%}:</h4>
+                <p id="total_price">{{cart.final_price|intcomma}}</p><br>
+                <button onclick="payment()" class="btn btn-primary"> {% translate "Payment"%} </button><br><br>
+
+
             </div>
         </div>
     </div>
 </div>
 {% else %}
-<p>سبد خرید شما خالی است.</p>
+<p>{% translate "Your Cart is empty"%}.</p>
 {% endif %}
 
 <script>
-    $("#submit").on('click', function () {
-        console.log("RUN");
-        console.log($("#coupon_form").serialize());
-        // send ajax
-        $.ajax({
-            url: "{% url 'orders_api:use_coupon' %}", // url where to submit the request
-            type: "POST", // type of action POST || GET
-            dataType: 'json', // data type
-            data: $("#coupon_form").serialize(), // post data || get data
-            success: function (result) {
-                console.log("success");
-                alert(" کد تخفیف شما با موفقیت اعمال شد")
-                // you can see the result from the console
-                // tab of the developer tools
-                console.log(result);
-                $("#total_price").text(result)
-            },
-            error: function (xhr, resp, text) {
-                console.log("error");
-                console.log(xhr, resp, text);
-            }
-        })
-    });
+    coupon_url = "{% url 'orders_api:use_coupon' %}"
+    add_address_url = "{% url 'customers_api:add_address' %}"
+    coupon_msg = "{% translate 'Discount code has been successfully applied'%}"
+    coupon_err_msg = "{% translate 'Discount code is incorrect or expierd'%}"
+    new_address_text = "{% translate 'New address registered successfully'%}"
+
 </script>
+<script src="{% static 'js/checkout.js' %}"></script>
+
+
+
+
 {% endblock %}

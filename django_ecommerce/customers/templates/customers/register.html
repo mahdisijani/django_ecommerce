@@ -1,6 +1,7 @@
 {% extends 'products/base.html' %}
-
-{% block title %} ثبت نام {% endblock %}
+{% load static %}
+{% load i18n%}
+{% block title %} {% translate 'register'%} {% endblock %}
 
 {% block content %}
 
@@ -11,40 +12,22 @@
         font-size: 1.4vw;">
             <form id="register_form" method="post" action="{% url 'customers_api:register' %}" enctype="multipart/form-data" class="form-signin p-3">
                 {% csrf_token %}
-                <label for="username" class="my-4">نام کاربری:</label><br>
+                <label for="username" class="my-4" required>{% translate 'Username'%}:</label><br>
                 <input type="text" name="username"><br>
-                <label for="password" class="my-4">کلمه عیور:</label><br>
+                <label for="password" class="my-4">{% translate 'Password'%}:</label><br>
                 <input type="password" name="password"><br>
-                <label for="email" class="my-4">ایمیل:</label><br>
+                <label for="email" class="my-4">{% translate 'Email'%}:</label><br>
                 <input type="email" name="email"><br>
-                <input type="button" id="submit" value="ثبت نام" class="btn btn-primary my-5" style="font-size: 1.4vw;">
+                <input type="button" id="submit" value="{% translate 'Register'%}" class="btn btn-primary my-5" style="font-size: 1.4vw;">
             </form>
         </div>
     </div>
 </div>
 
 <script>
-    $("#submit").on('click', function () {
-        console.log("RUN");
-        // send ajax
-        $.ajax({
-            // url: $("#take_courses").attr('action'), // url where to submit the request
-            url: "{% url 'customers_api:register' %}", // url where to submit the request
-            type: "POST", // type of action POST || GET
-            dataType: 'json', // data type
-            data: $("#register_form").serialize(), // post data || get data
-            success: function (result) {
-                console.log("success");
-                alert("ثبت نام شما با موفقیت انجام شد")
-                // you can see the result from the console
-                // tab of the developer tools
-                console.log(result);
-            },
-            error: function (xhr, resp, text) {
-                console.log("error");
-                console.log(xhr, resp, text);
-            }
-        })
-    });
+   register_url = "{% url 'customers_api:register' %}"
+   registration_msg_text = "{% translate 'Your registration was successful'%}"
 </script>
+<script src="{% static 'js/register.js' %}"></script>
+
 {% endblock %}

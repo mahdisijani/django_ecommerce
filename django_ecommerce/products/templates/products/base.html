@@ -1,69 +1,108 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="en" dir="rtl">
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% if LANGUAGE_CODE == 'fa'%}
+<html lang="fa" dir="rtl">
+{% else %}
+<html lang="en" dir="ltr">
+{% endif %}
 
 <head>
     <meta charset="UTF-8">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{% static 'js/pagination.min.js' %}"></script>
+    <script src="{% static 'js/base.js' %}"></script>
     <title>{% block title %}{% endblock %}</title>
     {% block extra_head %}{% endblock %}
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% if LANGUAGE_CODE == 'fa'%}
+    <link rel="stylesheet" href="{% static 'css/base_rtl.css' %}">
+    {% else %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% endif %}
 </head>
 
 <body>
     <!-- navbar-start -->
 
-    <div class="container-fluid text-right">
+    <div class="container-fluid {% if LANGUAGE_CODE == 'fa'%}text-right{% else %}text-left{% endif %}" style="background-color: white;">
         <div class="row" style="border:darkblue solid 2px;">
-            <div class="col-md-9 p-2" style="background-color: lightgray;">
-                <h1>فروشگاه من</h1>
+            <div class="col-md-6 p-2" style="background-color: lightgray;">
+                <h1>{% translate "Website Name" %} </h1>
             </div>
-            <div class="col-md-3 p-2" style="background-color: lightgray;">
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">جستجو</button>
+            <div class="col-3 p-2" style="background-color: lightgray;">
+                <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'products:index' %}.">
+                    <input class="form-control mr-sm-2" type="search" name="q" value="{{ request.GET.q }}" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">{% translate "search" %}</button>
                 </form>
             </div>
+            <div class="col-2 d-flex align-items-center" style="background-color: lightgray;">
+                <a href="{% url 'products:change_lang' %}?lang=en&next=/en/{{request.path|slice:'4:'}}">{% translate "EN" %}</a>/<a href="{% url 'products:change_lang' %}?lang=fa&next=/fa/{{request.path|slice:'4:'}}">{% translate "FA" %}</a>
+            </div>
+            <div class="col-1" style="background-color: lightgray;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill=#2E86C1 class="bi bi-cart"
+                    viewBox="0 0 16 16">
+                    <a xlink:href="{% url 'orders:cart' %}" fill=#2E86C1>
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                    </a>
+
+                </svg>
+            </div>
+
         </div>
         <div class="row" style="background-color: lightgray;border:darkblue solid 2px;">
-            <div class="col-1"><a href="{% url 'products:index' %}" class="text-primary">خانه</a></div>
-            <div class="col-1"><a href="{% url 'products:products' %}" class="text-primary">محصولات</a></div>
+            <div class="col-1"><a href="{% url 'products:index' %}" class="text-primary">{% translate "home" %}</a>
+            </div>
+            <div class="col-1">
+                <a href="{% url 'products:products' %}" class="text-primary">{% translate "products"%}</a>
+            </div>
             <div class="col-6"></div>
             {% if user.is_authenticated %}
-            <div class="col-1"><a href="{% url 'customers:profile' %}" class="text-primary">{{user.customer.first_name}} {{user.customer.last_name}}</a></div>
-            <div class="col-2"><a href="{% url 'customers:change_password' %}" class="text-primary">تغییر کلمه عبور</a></div>
-            <div class="col-1"><a href="{% url 'customers:logout' %}" class="text-primary">خروج</a></div>
+            <div class="col-2"></div>
+            {% if user.first_name %}
+
+            <div class="col-1"><a href="{% url 'customers:profile' %}" class="text-primary">{{user.first_name}}
+                    {{user.last_name}}</a></div>
             {% else %}
-            <div class="col-1"><a href="{% url 'customers:login' %}" class="text-primary">ورود</a></div>
-            <div class="col-1"><a href="{% url 'customers:register' %}" class="text-primary">ثبت نام</a></div>
+            <div class="col-1"><a href="{% url 'customers:profile' %}" class="text-primary">{% translate "profile"%}</a></div>
+            {% endif %}
+            <div class="col-1"><a href="{% url 'customers:logout' %}" class="text-primary">{% translate "logout"%}</a></div>
+            {% else %}
+            <div class="col-2"></div>
+            <div class="col-1"><a href="{% url 'customers:login' %}" class="text-primary">{% translate "login"%}</a></div>
+            <div class="col-1"><a href="{% url 'customers:register' %}" class="text-primary">{% translate "register"%}</a></div>
             {% endif %}
         </div>
 
 
-        <div class="container-fluid p-2 " id="main" style="min-height: 70vh;">
+        <div class="container-fluid p-2 " id="main" style="min-height: 70vh ; background-color: white ;">
+            {% csrf_token %}
+            <script>
+                csrf_token = $("input[name='csrfmiddlewaretoken']").val()
+                LANGUAGE_CODE = "{{LANGUAGE_CODE}}"
+            </script>
             {% block content %}{% endblock %}
         </div>
 
     </div>
 
     <!-- begin:footer -->
-    <div id="footer" class="bg-dark text-white text-right">
+    <div id="footer" class="bg-dark text-white {% if LANGUAGE_CODE == 'fa'%}text-right{% else %}text-left{% endif %}">
         <div class="container">
             <div class="row pt-5">
                 <div class="col-6 p-2">
-                    <h3>درباره من</h3><br>
-                    <p>مهدی سیجانی</p>
+                    <h3>{% translate "About Me"%}</h3><br>
+                    <p>{% translate "Mahdi Sijani"%}</p>
 
-                    <p> کاروند بوت کمپ مکتب 53
+                    <p> {% translate "Maktab Sharif BootCamp 53"%} 
                         (Python Back-End Developer)</p>
 
                 </div>
                 <div class="col-2 p-2"></div>
                 <div class="col-4 p-2">
                     <div class="widget">
-                        <h3>لینک ها</h3>
+                        <h3>{% translate "Contact us"%}</h3>
                         <address>
                             Telp. : +98-123456789<br>
                             Email : Info@gmail.com
@@ -75,7 +114,7 @@
                 <!-- begin:copyleft -->
                 <div class="row">
                     <div class="col-md-12 copyleft">
-                        <p> هر گونه کپی برداری با ذکر منبع مجاز می باشد.</p>
+                        <p> {% translate "copyright text"%}</p>
 
                         <a href="#top" class="btn btn-primary scroltop"><i class="fa fa-angle-up"></i></a>
 
@@ -86,39 +125,6 @@
         <!-- end:footer -->
 </body>
 
-<script type="text/javascript">
 
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    function uuidv4() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
-
-    let device = getCookie('device')
-
-    if (device == null || device == undefined) {
-        device = uuidv4()
-    }
-
-    document.cookie = 'device=' + device + ";domain=;path=/"
-
-</script>
 
 </html>

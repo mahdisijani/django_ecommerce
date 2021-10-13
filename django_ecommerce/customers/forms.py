@@ -6,23 +6,20 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 class RegisterForm(UserCreationForm):
-#profile_year        = blaaa blaa blaaa irrelevant.. You have your own stuff here don't worry about it
-
-   # here is the important part.. add a class Meta-
    class Meta:
-      model = User #this is the "YourCustomUser" that you imported at the top of the file  
-      fields = ('username', 'password1', 'password2',) #etc etc, other fields you want displayed on the form)
+      model = User 
+      fields = ('username', 'password1', 'password2',) 
 
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ('email','first_name','last_name','mobile',)
 
 
-class CustomerForm(forms.ModelForm):
-    class Meta:
-        model = Customer
-        fields = ('first_name','last_name',)
+# class CustomerForm(forms.ModelForm):
+#     class Meta:
+#         model = Customer
+#         fields = ('first_name','last_name',)
 
 class AddressForm(forms.ModelForm):
     class Meta:

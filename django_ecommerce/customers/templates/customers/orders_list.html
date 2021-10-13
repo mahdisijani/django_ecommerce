@@ -1,0 +1,46 @@
+{% extends 'customers/profile_base.html' %}
+{% load i18n%}
+{% block title %} {% translate "order history"%} {% endblock %}
+
+{% block profile_content %}
+{% if orders %}
+<table class="table table-striped mt-5">
+    <thead>
+        <tr>
+            <th>{% translate "order number"%}</th>
+            <th>{% translate "order date"%}</th>
+            <th>{% translate "status"%}</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    {% for order in orders %}
+    
+        <tr>
+            <td>
+                {{ order.id }}
+            </td>
+            <td>
+                {% if LANGUAGE_CODE == 'fa'%}
+                {{ order.jdate }}
+                {% else %}
+                {{ order.date }}
+                {% endif %}
+            </td>
+            <td>
+                {% translate  order.status %}
+            </td>
+            <td>
+                <a href="{% url 'customers:order_detail' order.id %}"> {% translate "Details"%}</a>
+            </td>
+        </tr>
+   
+    {% endfor %}
+</table>
+
+
+{% else %}
+<p> {% translate "No Orders yet"%}</p>
+{% endif %}
+
+{% endblock %}

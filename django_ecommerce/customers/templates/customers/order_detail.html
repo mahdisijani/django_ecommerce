@@ -1,0 +1,35 @@
+{% extends 'customers/profile_base.html' %}
+{% load i18n%}
+{% load humanize %} 
+{% block title %}{% translate "order history"%} {% endblock %}
+
+{% block profile_content %}
+
+<table class="table table-striped mt-5">
+    <thead>
+        <tr>
+            <th>{% translate "product name"%}</th>
+            <th>{% translate "quantity"%}</th>
+            <th>{% translate "price"%}</th>
+        </tr>
+    </thead>
+
+    {% for item in order.item.all %}
+    <tr>
+        <td>
+            <a href="{% url 'products:product' item.product.id %}">{{item.product.name}}</a>
+        </td>
+        <td>
+            {{item.quantity}}
+        </td>
+        <td>
+            {{item.total_item_price |intcomma}}
+        </td>
+    </tr>
+
+    {% endfor %}
+</table>
+<p>{% translate "total price"%} : {{order.total_price|intcomma}}</p>
+<p>{% translate "final price"%} : {{order.final_price|intcomma}}</p>
+
+{% endblock %}

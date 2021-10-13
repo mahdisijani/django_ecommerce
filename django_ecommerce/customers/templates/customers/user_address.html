@@ -1,0 +1,68 @@
+{% extends 'customers/profile_base.html' %}
+{% load static %}
+{% load i18n%}
+{% load crispy_forms_tags %}
+{% block title %} {% translate "Addresses"%} {% endblock %}
+
+{% block profile_content %}
+{% csrf_token %}
+{% if addresses %}
+<table class="table table-striped mt-5">
+    <thead>
+        <tr>
+            <th>{% translate "City"%} </th>
+            <th>{% translate "Address"%} </th>
+            <th>{% translate "Zip Code"%}</th>
+        </tr>
+    </thead>
+
+    {% for address in addresses %}
+    <tr>
+        <td>
+            {{ address.city }}
+        </td>
+        <td>
+            {{ address.address }}
+        </td>
+        <td>
+            {{ address.postalcode }}
+        </td>
+    </tr>
+
+    {% endfor %}
+</table>
+
+
+{% else %}
+<p>{% translate "There is no address"%}</p>
+{% endif %}
+
+<div class="p-2">
+    <div class="mt-2">
+        <h4>{% translate "Add New Address"%}</h4>
+    </div>
+    <div class="p-2 border">
+        <form action="" id="add_address_form">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group col-md-12 mb-0">
+                    {{ addressForm.address|as_crispy_field }}
+                </div>
+                <div class="form-group col-md-8 mb-0">
+                    {{ addressForm.city|as_crispy_field }}
+                </div>
+                <div class="form-group col-md-4 mb-0">
+                    {{ addressForm.postalcode|as_crispy_field }}
+                </div>
+            </div>
+
+            <input type="button" id="submit" value="{% translate 'Add Address'%} " onclick="add_address()" class="btn btn-primary my-5">
+        </form>
+    </div>
+</div>
+<script>
+    add_address_url = "{% url 'customers_api:add_address' %}"
+    new_address_text = "{% translate 'New address registered successfully'%}"
+</script>
+<script src="{% static 'js/user_address.js' %}"></script>
+{% endblock %}
