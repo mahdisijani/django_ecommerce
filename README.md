@@ -1,13 +1,13 @@
 Django Ecommerce
 ======
-**We have developed a ecommerce project using the Django and Postgres database.**
+**A multi language ecommerce using Django and PostgreSQL database.**
 
 Install
 -------
 
 **Be sure to use the same version of the code as the version of the docs
 you're reading.** You probably want the latest tagged version, but the
-default Git version is the master branch. ::
+default Git version is the master branch.
 
     # clone the repository
     $ git clone https://github.com/mahdisj/django_ecommerce.git
