@@ -13,6 +13,12 @@ default Git version is the master branch.
     $ git clone https://github.com/mahdisj/django_ecommerce.git
     $ cd django_ecommerce
 
+If you use docker-compose run these commands and jump to database step :
+
+    $ docker-compose up
+    $ docker-compose run web
+
+
 Create a virtualenv and activate it
 
     $ python3 -m venv venv
