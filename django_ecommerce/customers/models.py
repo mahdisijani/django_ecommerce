@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 
 
 class User(AbstractUser):
-    email=models.EmailField(unique=True,verbose_name=_('email'),null=True,blank=True)
+    email=models.EmailField(unique=True,verbose_name=_('email'))
     mobile=models.CharField(max_length=20,null=True,blank=True,unique=True,verbose_name=_('mobile'))
     
     def clean(self):

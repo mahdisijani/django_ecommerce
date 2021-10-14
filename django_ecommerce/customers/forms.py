@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import  UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 from .models import *
 from django.contrib.auth import get_user_model
 # Create your views here.
@@ -16,11 +16,6 @@ class UserForm(forms.ModelForm):
         fields = ('email','first_name','last_name','mobile',)
 
 
-# class CustomerForm(forms.ModelForm):
-#     class Meta:
-#         model = Customer
-#         fields = ('first_name','last_name',)
-
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
@@ -28,5 +23,8 @@ class AddressForm(forms.ModelForm):
 
         
         
-    
+class CustomUserCreationForm(UserCreationForm):
 
+    class Meta:
+        model = User
+        fields = ('username','email',)
